@@ -1,0 +1,1 @@
+<html><body style="font-family:DejaVu Sans;font-size:11px"><h3>DPAM Industrial Supplies and Services Inc. — {{ $title }}</h3><p>Generated {{ now()->format('M d, Y h:i A') }}</p>@include('admin.reports._table')</body></html>

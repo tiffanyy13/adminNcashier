@@ -1,0 +1,4 @@
+<x-app-layout><x-slot name="header"><h2 class="font-semibold text-xl"> {{ $supplier->exists?'Edit':'New' }} Supplier</h2></x-slot><div class="max-w-xl mx-auto p-6">@include("partials.flash")
+<form method="POST" action="{{ $supplier->exists ? route('admin.suppliers.update',$supplier) : route('admin.suppliers.store') }}" class="bg-white border border-black p-4 space-y-3">@csrf @if($supplier->exists) @method('PUT') @endif
+@foreach(['name'=>'Name','contact_person'=>'Contact person','phone'=>'Phone','email'=>'Email','categories_supplied'=>'Categories supplied'] as $f=>$l)<input name="{{ $f }}" placeholder="{{ $l }}" value="{{ old($f,$supplier->$f) }}" class="w-full border-black">@endforeach
+<textarea name="notes" placeholder="Notes on reliability" class="w-full border-black">{{ old('notes',$supplier->notes) }}</textarea><button class="bg-black text-white px-5 py-2">Save</button></form></div></x-app-layout>

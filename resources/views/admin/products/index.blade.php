@@ -1,0 +1,9 @@
+<x-app-layout><x-slot name="header"><h2 class="font-semibold text-xl">Products</h2></x-slot>
+<div class="max-w-7xl mx-auto p-6 space-y-3">@if(session('status'))<div class="border border-black p-3">{{ session('status') }}</div>@endif
+<form class="flex gap-2 text-sm"><input name="q" value="{{ request('q') }}" placeholder="Search name" class="border-black">
+<select name="category" class="border-black"><option value="">All categories</option>@foreach($categories as $c)<option value="{{ $c->id }}" @selected(request('category')==$c->id)>{{ $c->name }}</option>@endforeach</select>
+<select name="status" class="border-black"><option value="">Any status</option><option @selected(request('status')=='active')>active</option><option @selected(request('status')=='inactive')>inactive</option></select>
+<button class="bg-black text-white px-3">Filter</button><a href="{{ route('admin.products.create') }}" class="ml-auto border-2 border-black px-3 py-1">+ New Product</a></form>
+<div class="bg-white border border-black"><table class="w-full text-sm"><thead class="bg-black text-white"><tr><th class="p-2 text-left">Product</th><th class="p-2">Category</th><th class="p-2">UoM</th><th class="p-2 text-right">Price</th><th class="p-2">Status</th><th></th></tr></thead>
+@foreach($products as $p)<tr class="border-t"><td class="p-2">{{ $p->full_name }}</td><td class="p-2 text-center">{{ $p->category->name }}</td><td class="p-2 text-center">{{ $p->unit_of_measure }}</td><td class="p-2 text-right">₱{{ number_format($p->unit_price,2) }}</td><td class="p-2 text-center">{{ $p->status }}</td>
+<td class="p-2 flex gap-3 justify-end"><a class="underline" href="{{ route('admin.products.edit',$p) }}">Edit</a><form method="POST" action="{{ route('admin.products.toggle',$p) }}">@csrf @method('PATCH')<button class="underline">{{ $p->status=='active'?'Deactivate':'Activate' }}</button></form></td></tr>@endforeach</table></div>{{ $products->links() }}</div></x-app-layout>

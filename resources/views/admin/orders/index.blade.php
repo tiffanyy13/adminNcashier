@@ -1,0 +1,7 @@
+<x-app-layout><x-slot name="header"><h2 class="font-semibold text-xl">Orders & Quotations</h2></x-slot>
+<div class="max-w-7xl mx-auto p-6 space-y-3">@if(session('status'))<div class="border border-black p-3">{{ session('status') }}</div>@endif
+<form class="flex gap-2 text-sm"><input name="q" value="{{ request('q') }}" placeholder="Customer name" class="border-black">
+<select name="status" class="border-black"><option value="">All</option>@foreach(['quotation','pending_approval','confirmed','paid','released'] as $s)<option @selected(request('status')==$s)>{{ $s }}</option>@endforeach</select>
+<button class="bg-black text-white px-3">Filter</button><a href="{{ route('admin.orders.create') }}" class="ml-auto border-2 border-black px-3 py-1">+ New Order</a></form>
+<div class="bg-white border border-black"><table class="w-full text-sm"><thead class="bg-black text-white"><tr><th class="p-2 text-left">Order #</th><th class="p-2 text-left">Customer</th><th class="p-2">Status</th><th class="p-2 text-right">Total</th><th></th></tr></thead>
+@foreach($orders as $o)<tr class="border-t"><td class="p-2">{{ $o->order_number }}</td><td class="p-2">{{ $o->customer_name }}</td><td class="p-2 text-center">{{ str_replace('_',' ',$o->status) }}</td><td class="p-2 text-right">₱{{ number_format($o->total,2) }}</td><td class="p-2 text-right"><a class="underline" href="{{ route('admin.orders.show',$o) }}">Open</a></td></tr>@endforeach</table></div>{{ $orders->links() }}</div></x-app-layout>

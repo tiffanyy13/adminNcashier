@@ -1,0 +1,8 @@
+<x-app-layout><x-slot name="header"><h2 class="font-semibold text-xl"> {{ $title }}</h2></x-slot><div class="max-w-7xl mx-auto p-6 space-y-3">@include("partials.flash")
+<div class="flex gap-3 text-sm">@foreach(['inventory'=>'Inventory','sales'=>'Sales','reorder'=>'Reorder Alert','delivery'=>'Delivery Log'] as $k=>$l)<a href="{{ route('admin.reports',$k) }}" class="px-3 py-1 {{ $type==$k?'bg-black text-white':'border border-black' }}">{{ $l }}</a>@endforeach</div>
+<form class="flex gap-2 text-sm flex-wrap"><input type="date" name="from" value="{{ request('from') }}" class="border-black"><input type="date" name="to" value="{{ request('to') }}" class="border-black">
+<select name="category" class="border-black"><option value="">All categories</option>@foreach($categories as $c)<option value="{{ $c->id }}" @selected(request('category')==$c->id)>{{ $c->name }}</option>@endforeach</select>
+<select name="product" class="border-black"><option value="">All products</option>@foreach($products as $p)<option value="{{ $p->id }}" @selected(request('product')==$p->id)>{{ $p->full_name }}</option>@endforeach</select>
+@if($type=='sales')<select name="group" class="border-black">@foreach(['day','month','product','customer'] as $g)<option @selected(request('group')==$g)>{{ $g }}</option>@endforeach</select>@endif
+<button class="bg-black text-white px-3">Apply</button><a class="border-2 border-black px-3" href="{{ request()->fullUrlWithQuery(['format'=>'pdf']) }}">PDF</a><a class="border-2 border-black px-3" href="{{ request()->fullUrlWithQuery(['format'=>'csv']) }}">Excel (CSV)</a></form>
+<div class="bg-white p-2 overflow-x-auto">@include('admin.reports._table')</div></div></x-app-layout>

@@ -1,0 +1,10 @@
+<x-app-layout><x-slot name="header"><h2 class="font-semibold text-xl">Sales Transaction Records</h2></x-slot>
+<div class="max-w-7xl mx-auto p-6 space-y-4">
+<form class="grid grid-cols-6 gap-2 text-sm"><input name="receipt" placeholder="OR #" value="{{ request('receipt') }}" class="border-black"><input name="customer" placeholder="Customer" value="{{ request('customer') }}" class="border-black">
+<input type="date" name="from" value="{{ request('from') }}" class="border-black"><input type="date" name="to" value="{{ request('to') }}" class="border-black">
+<select name="mode" class="border-black"><option value="">All modes</option>@foreach(['cash','gcash','maya','bank_transfer','check','pdc'] as $m)<option @selected(request('mode')==$m)>{{ $m }}</option>@endforeach</select>
+<select name="status" class="border-black"><option value="">All status</option>@foreach(['paid','check_pending_clearance','cleared'] as $s)<option @selected(request('status')==$s)>{{ $s }}</option>@endforeach</select>
+<button class="bg-black text-white px-3 py-1 col-span-6 w-24">Filter</button></form>
+<div class="bg-white border border-black"><table class="w-full text-sm"><thead class="bg-black text-white"><tr><th class="p-2 text-left">OR #</th><th class="p-2 text-left">Customer</th><th class="p-2">Mode</th><th class="p-2 text-right">Total</th><th class="p-2">Status</th><th class="p-2">Date</th><th></th></tr></thead>
+@forelse($sales as $s)<tr class="border-t"><td class="p-2">{{ $s->official_receipt_number }}</td><td class="p-2">{{ $s->order->customer_name }}</td><td class="p-2 text-center">{{ $s->payment_mode }}</td><td class="p-2 text-right">₱{{ number_format($s->total,2) }}</td><td class="p-2 text-center">{{ str_replace('_',' ',$s->status) }}</td><td class="p-2 text-center">{{ $s->created_at->format('M d, Y') }}</td><td class="p-2"><a class="underline" href="{{ route('cashier.sales.show',$s) }}">View</a></td></tr>
+@empty<tr><td colspan="7" class="p-4 text-center text-gray-500">No transactions.</td></tr>@endforelse</table></div>{{ $sales->links() }}</div></x-app-layout>
